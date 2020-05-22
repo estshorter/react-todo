@@ -10,7 +10,7 @@ class InputForm extends React.Component {
   }
 
   handleSubmit = (event) => {
-    this.props.onSubmit(this.state.text)
+    this.props.onAdd(this.state.text)
     this.setState({ text: "" });
     event.preventDefault();
   }
@@ -74,7 +74,7 @@ class TodoApp extends React.Component {
     }
   }
 
-  handleSubmit = (text) => {
+  handleAdd = (text) => {
     this.setState((state) => ({
       todos: state.todos.concat({ id: state.currentId + 1, content: text, completed: false }),
       currentId: state.currentId + 1
@@ -93,7 +93,7 @@ class TodoApp extends React.Component {
     const todos = this.state.todos.filter(todo => {
       return todo.id !== id;
     });
-    this.setState({ todos: todos, currentId: todos.length })
+    this.setState({ todos: todos })
   }
 
   getInComplete = () => {
@@ -103,7 +103,7 @@ class TodoApp extends React.Component {
   render() {
     return (
       <div className="todoapp">
-        <InputForm onSubmit={this.handleSubmit} />
+        <InputForm onAdd={this.handleAdd} />
         <List todos={this.state.todos} onDeleted={this.handleDeleted} onCompleted={this.handleCompleted} />
         <TodoCount count={this.state.todos.length} incomplete={this.getInComplete()} />
       </div>
