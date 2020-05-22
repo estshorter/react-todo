@@ -34,7 +34,7 @@ function TodoCount(props) {
   return (
     <footer className="footer">
       <span id
-        ="js-todo-count">Todoアイテム数: {props.count}</span>
+        ="js-todo-count">全アイテム数: {props.count}、未完了タスク: {props.incomplete}</span>
     </footer>)
 }
 
@@ -96,12 +96,16 @@ class TodoApp extends React.Component {
     this.setState({ todos: todos, currentId: todos.length })
   }
 
+  getInComplete = () => {
+    return this.state.todos.filter(todo => !todo.completed).length
+  }
+
   render() {
     return (
       <div className="todoapp">
         <InputForm onSubmit={this.handleSubmit} />
         <List todos={this.state.todos} onDeleted={this.handleDeleted} onCompleted={this.handleCompleted} />
-        <TodoCount count={this.state.todos.length} />
+        <TodoCount count={this.state.todos.length} incomplete={this.getInComplete()} />
       </div>
     );
   }
