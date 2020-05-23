@@ -1,37 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-class InputForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: ""
-    }
-  }
+function InputForm(props) {
+  const [text, setText] = useState("");
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.text === "") {
+    if (text === "") {
       return
     }
-
-    this.props.onAdd(this.state.text)
-    this.setState({ text: "" });
+    props.onAdd(text)
+    setText("");
   }
 
-  handleChange = (event) => {
-    this.setState({ text: event.target.value });
+  const handleChange = (event) => {
+    setText(event.target.value);
   }
 
-  render() {
-    return (
-      <form id="js-form" onSubmit={this.handleSubmit} >
-        <input id="js-form-input" className="new-todo" type="text"
-          placeholder="What need to be done?"
-          autoComplete="off" value={this.state.text}
-          onChange={this.handleChange} />
-      </form>)
-  }
+  return (
+    <form id="js-form" onSubmit={handleSubmit} >
+      <input id="js-form-input" className="new-todo" type="text"
+        placeholder="What need to be done?"
+        autoComplete="off" value={text}
+        onChange={handleChange} />
+    </form>)
 }
 
 function TodoCount(props) {
