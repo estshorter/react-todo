@@ -61,50 +61,46 @@ function List(props) {
   )
 }
 
-class TodoApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: [{ id: 0, content: "ゴミ出し", completed: false }, { id: 1, content: "掃除", completed: false }],
-      currentId: 2
-    }
+function TodoApp(props) {
+  const [todoList, setTodoList] = useState([{ id: 0, content: "ゴミ出し", completed: false }, { id: 1, content: "掃除", completed: false }]);
+
+  const handleAdd = (text) => {
+    setTodoList(todoList.concat({ id: getNextId(), content: text, completed: false }))
   }
 
-  handleAdd = (text) => {
-    this.setState((state) => ({
-      todos: state.todos.concat({ id: state.currentId + 1, content: text, completed: false }),
-      currentId: state.currentId + 1
-    }));
-  }
-
-  handleCompleted = (id) => {
-    const todos = this.state.todos.slice()
-    const modifiedTodoIdx = todos.findIndex(todo => todo.id === id)
-    const todo = todos[modifiedTodoIdx]
+  const handleCompleted = (id) => {
+    const todoListCopy = todoList.slice()
+    const modifiedTodoIdx = todoListCopy.findIndex(todo => todo.id === id)
+    const todo = todoListCopy[modifiedTodoIdx]
     todo.completed = !todo.completed
-    this.setState({ todos: todos })
+    setTodoList(todoListCopy)
   }
 
-  handleDeleted = (id) => {
-    const todos = this.state.todos.filter(todo => {
+  const handleDeleted = (id) => {
+    setTodoList(todoList.filter(todo => {
       return todo.id !== id;
-    });
-    this.setState({ todos: todos })
+    }))
   }
 
-  getInComplete = () => {
-    return this.state.todos.filter(todo => !todo.completed).length
+  const getInCompleteNum = () => {
+    return todoList.filter(todo => !todo.completed).length
   }
 
-  render() {
-    return (
-      <div className="todoapp">
-        <InputForm onAdd={this.handleAdd} />
-        <List todos={this.state.todos} onDeleted={this.handleDeleted} onCompleted={this.handleCompleted} />
-        <TodoCount count={this.state.todos.length} incomplete={this.getInComplete()} />
-      </div>
-    );
+  const getNextId = () => {
+    const idList = todoList.map(todo => todo.id)
+    if (idList.length === 0) {
+      return 0
+    }
+    return Math.max(...idList) + 1
   }
+
+  return (
+    <div className="todoapp">
+      <InputForm onAdd={handleAdd} />
+      <List todos={todoList} onDeleted={handleDeleted} onCompleted={handleCompleted} />
+      <TodoCount count={todoList.length} incomplete={getInCompleteNum()} />
+    </div>
+  );
 }
 
 export default TodoApp;
