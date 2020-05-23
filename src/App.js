@@ -10,9 +10,13 @@ class InputForm extends React.Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.text === "") {
+      return
+    }
+
     this.props.onAdd(this.state.text)
     this.setState({ text: "" });
-    event.preventDefault();
   }
 
   handleChange = (event) => {
